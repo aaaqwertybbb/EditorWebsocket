@@ -16,11 +16,25 @@ internal class Program
         server.MessageReceived += (sender, args) =>
         {
             ReadOnlySpan<byte> transactionBuffer = args.Data;
+            // args.Data[0] => 104 => 'h'
+            // args.Data[1] => 105 => 'i'
+
             // Process your text editor sync logic here
             Console.WriteLine($"Received {transactionBuffer.Length} bytes of transaction data.");
 
+            // Look up the exact GUID assigned to this JS client
+            Guid clientGuid = args.Client.Guid;
+
             // Echo or broadcast back if necessary
-            // server.SendAsync(args.Client.IpPort, replyBytes);
+            var test = "hello"u8;
+            //byte[] replyBytes = new byte[5];
+            //replyBytes[0] = 'h';
+            //replyBytes[1] = 'e';
+            //replyBytes[2] = 'l';
+            //replyBytes[3] = 'l';
+            //replyBytes[4] = 'o';
+
+            server.SendAsync(clientGuid, test.ToArray());
         };
 
         server.Start();
